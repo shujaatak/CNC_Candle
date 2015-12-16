@@ -204,7 +204,7 @@
         <location filename="../frmmain.ui" line="1731"/>
         <location filename="../frmmain.cpp" line="1342"/>
         <location filename="../frmmain.cpp" line="1353"/>
-        <location filename="../frmmain.cpp" line="3042"/>
+        <location filename="../frmmain.cpp" line="3043"/>
         <source>Open</source>
         <translation>Ouvrir</translation>
     </message>
@@ -350,8 +350,8 @@
         <location filename="../frmmain.cpp" line="1939"/>
         <location filename="../frmmain.cpp" line="1941"/>
         <location filename="../frmmain.cpp" line="1965"/>
-        <location filename="../frmmain.cpp" line="2327"/>
-        <location filename="../frmmain.cpp" line="2329"/>
+        <location filename="../frmmain.cpp" line="2328"/>
+        <location filename="../frmmain.cpp" line="2330"/>
         <source>Spindle</source>
         <translation>Broche</translation>
     </message>
@@ -367,8 +367,8 @@
     </message>
     <message>
         <location filename="../frmmain.ui" line="1898"/>
-        <location filename="../frmmain.cpp" line="2315"/>
-        <location filename="../frmmain.cpp" line="2317"/>
+        <location filename="../frmmain.cpp" line="2316"/>
+        <location filename="../frmmain.cpp" line="2318"/>
         <source>Feed</source>
         <translation>Avance</translation>
     </message>
@@ -384,11 +384,11 @@
     </message>
     <message>
         <location filename="../frmmain.ui" line="1990"/>
-        <location filename="../frmmain.cpp" line="2339"/>
-        <location filename="../frmmain.cpp" line="2341"/>
-        <location filename="../frmmain.cpp" line="2424"/>
-        <location filename="../frmmain.cpp" line="2530"/>
-        <location filename="../frmmain.cpp" line="2533"/>
+        <location filename="../frmmain.cpp" line="2340"/>
+        <location filename="../frmmain.cpp" line="2342"/>
+        <location filename="../frmmain.cpp" line="2425"/>
+        <location filename="../frmmain.cpp" line="2531"/>
+        <location filename="../frmmain.cpp" line="2534"/>
         <source>Jog</source>
         <translation>Contrôle Manuel </translation>
     </message>
@@ -675,13 +675,13 @@ Temps écoulé: %1</translation>
     <message>
         <location filename="../frmmain.cpp" line="1353"/>
         <location filename="../frmmain.cpp" line="2183"/>
-        <location filename="../frmmain.cpp" line="3042"/>
+        <location filename="../frmmain.cpp" line="3043"/>
         <source>Heightmap files (*.map)</source>
         <translation>Fichier de palpage (*.map)</translation>
     </message>
     <message>
         <location filename="../frmmain.cpp" line="1470"/>
-        <location filename="../frmmain.cpp" line="2960"/>
+        <location filename="../frmmain.cpp" line="2961"/>
         <source>Can&apos;t open file:
 </source>
         <translation>Impossible d&apos;ouvrir du fichier:
@@ -708,11 +708,11 @@ Temps écoulé: %1</translation>
     <message>
         <location filename="../frmmain.cpp" line="1939"/>
         <location filename="../frmmain.cpp" line="1965"/>
-        <location filename="../frmmain.cpp" line="2317"/>
-        <location filename="../frmmain.cpp" line="2329"/>
-        <location filename="../frmmain.cpp" line="2341"/>
-        <location filename="../frmmain.cpp" line="2424"/>
-        <location filename="../frmmain.cpp" line="2530"/>
+        <location filename="../frmmain.cpp" line="2318"/>
+        <location filename="../frmmain.cpp" line="2330"/>
+        <location filename="../frmmain.cpp" line="2342"/>
+        <location filename="../frmmain.cpp" line="2425"/>
+        <location filename="../frmmain.cpp" line="2531"/>
         <source> (%1)</source>
         <translation></translation>
     </message>
@@ -729,7 +729,7 @@ Temps écoulé: %1</translation>
         <translation>Enregistrer le fichier sous</translation>
     </message>
     <message>
-        <location filename="../frmmain.cpp" line="2700"/>
+        <location filename="../frmmain.cpp" line="2701"/>
         <source>Changing grid settings will reset probe data. Continue?</source>
         <translation>Changer les paramètres de la grille, réinitialise les données de palpage. Continuer?</translation>
     </message>
@@ -815,12 +815,12 @@ Temps écoulé: %1</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="555"/>
+        <location filename="../frmsettings.ui" line="561"/>
         <source>Spindle speed min.:</source>
         <translation>Vitesse broche min.:</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="548"/>
+        <location filename="../frmsettings.ui" line="554"/>
         <source>max.:</source>
         <translation>max.:</translation>
     </message>
@@ -855,7 +855,7 @@ Temps écoulé: %1</translation>
         <translation>Imperial</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="585"/>
+        <location filename="../frmsettings.ui" line="591"/>
         <source>Parser</source>
         <translation>Analyseur</translation>
     </message>
@@ -864,63 +864,68 @@ Temps écoulé: %1</translation>
         <translation type="vanished">Largeur de segment des arcs:</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="710"/>
-        <location filename="../frmsettings.ui" line="1150"/>
+        <location filename="../frmsettings.ui" line="716"/>
+        <location filename="../frmsettings.ui" line="1156"/>
         <source>Visualizer</source>
         <translation>Apparence</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="727"/>
+        <location filename="../frmsettings.ui" line="733"/>
         <source>Line width:</source>
         <translation>Espaisseur de ligne:</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="790"/>
+        <location filename="../frmsettings.ui" line="796"/>
         <source>Smoothing</source>
         <translation>Lissage</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="800"/>
+        <location filename="../frmsettings.ui" line="806"/>
         <source>MSAA</source>
         <translation>MSAA</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="718"/>
+        <location filename="../frmsettings.ui" line="724"/>
         <source>Simplify geometry</source>
         <translation>Simplifier la geometrie</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="814"/>
+        <location filename="../frmsettings.ui" line="820"/>
         <source>Segment length:</source>
         <translation>Largeur de segment:</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="754"/>
+        <location filename="../frmsettings.ui" line="760"/>
         <source>FPS lock:</source>
         <translation>Bloquer FPS:</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="514"/>
+        <location filename="../frmsettings.ui" line="197"/>
+        <source>Application measurement units:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frmsettings.ui" line="520"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&amp;quot;Restore XYZ&amp;quot; moves tool in:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="768"/>
+        <location filename="../frmsettings.ui" line="774"/>
         <source>30</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="773"/>
+        <location filename="../frmsettings.ui" line="779"/>
         <source>60</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="778"/>
+        <location filename="../frmsettings.ui" line="784"/>
         <source>120</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="858"/>
+        <location filename="../frmsettings.ui" line="864"/>
         <source>Z-buffer</source>
         <translation></translation>
     </message>
@@ -929,128 +934,123 @@ Temps écoulé: %1</translation>
         <translation type="vanished">Représentation de l&apos;outil</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="876"/>
+        <location filename="../frmsettings.ui" line="882"/>
         <source>Type:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="883"/>
+        <location filename="../frmsettings.ui" line="889"/>
         <source>Diameter:</source>
         <translation>Diamètre:</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="897"/>
+        <location filename="../frmsettings.ui" line="903"/>
         <source>Flat</source>
         <translation>Plat</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="902"/>
+        <location filename="../frmsettings.ui" line="908"/>
         <source>Conic</source>
         <translation>Conique</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="913"/>
+        <location filename="../frmsettings.ui" line="919"/>
         <source>Angle:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="920"/>
+        <location filename="../frmsettings.ui" line="926"/>
         <source>Length:</source>
         <translation>Longueur:</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1012"/>
+        <location filename="../frmsettings.ui" line="1018"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1018"/>
+        <location filename="../frmsettings.ui" line="1024"/>
         <source>Show G-code program commands</source>
         <translation>Montrer commande du programme G-Code</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1025"/>
+        <location filename="../frmsettings.ui" line="1031"/>
         <source>Show UI commands</source>
         <translation>Montrer les commandes de l&apos;interface utilisateur</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1032"/>
+        <location filename="../frmsettings.ui" line="1038"/>
         <source>Command auto-completion</source>
         <translation>Commande Saisie auto</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1042"/>
+        <location filename="../frmsettings.ui" line="1048"/>
         <source>Panels</source>
         <translation>Panneaux de contrôle</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1048"/>
+        <location filename="../frmsettings.ui" line="1054"/>
         <source>Heightmap</source>
         <translation>Palpage surfacique</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1055"/>
+        <location filename="../frmsettings.ui" line="1061"/>
         <source>Feed</source>
         <translation>Avance</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1062"/>
+        <location filename="../frmsettings.ui" line="1068"/>
         <source>Spindle</source>
         <translation>Broche</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1069"/>
+        <location filename="../frmsettings.ui" line="1075"/>
         <source>Jog</source>
         <translation>Contrôle manuel</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1079"/>
+        <location filename="../frmsettings.ui" line="1085"/>
         <source>Colors</source>
         <translation>Couleurs</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1087"/>
+        <location filename="../frmsettings.ui" line="1093"/>
         <source>Z-movement:</source>
         <translation>Mouvement Z:</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1203"/>
+        <location filename="../frmsettings.ui" line="1209"/>
         <source>Normal:</source>
         <translation>Normal:</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1094"/>
+        <location filename="../frmsettings.ui" line="1100"/>
         <source>Toolpath</source>
         <translation>Parcours d&apos;outil</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="617"/>
+        <location filename="../frmsettings.ui" line="623"/>
         <source>by length</source>
         <translation>Par longueur</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="695"/>
+        <location filename="../frmsettings.ui" line="701"/>
         <source>(used in the visualizer and the procedure of transformation files in accordance with the height map)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1190"/>
+        <location filename="../frmsettings.ui" line="1196"/>
         <source>Drawn:</source>
         <translation>Dessin:</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1107"/>
+        <location filename="../frmsettings.ui" line="1113"/>
         <source>Background:</source>
         <translation>Fond:</translation>
     </message>
     <message>
         <location filename="../frmsettings.ui" line="189"/>
         <source>Common</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frmsettings.ui" line="197"/>
-        <source>Settings measurement units:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1114,103 +1114,103 @@ Temps écoulé: %1</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="593"/>
+        <location filename="../frmsettings.ui" line="599"/>
         <source>Arc approximation segment size:</source>
         <translation>Largeur de segment des arcs:</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="662"/>
+        <location filename="../frmsettings.ui" line="668"/>
         <source>by angle (deg.)</source>
         <translation>Par Angle</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="870"/>
+        <location filename="../frmsettings.ui" line="876"/>
         <source>Tool model</source>
         <translation>Modèle de l&apos;outil</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1120"/>
+        <location filename="../frmsettings.ui" line="1126"/>
         <source>Highlight:</source>
         <translation>Souligner:</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1127"/>
+        <location filename="../frmsettings.ui" line="1133"/>
         <source>Start point:</source>
         <translation>Origine:</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1137"/>
+        <location filename="../frmsettings.ui" line="1143"/>
         <source>End point:</source>
         <translation>Point final:</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1157"/>
+        <location filename="../frmsettings.ui" line="1163"/>
         <source>Text:</source>
         <translation>Texte:</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1164"/>
+        <location filename="../frmsettings.ui" line="1170"/>
         <source>Tool:</source>
         <translation>Outil:</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1215"/>
+        <location filename="../frmsettings.ui" line="1221"/>
         <source>Font</source>
         <translation>Ecriture</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1221"/>
+        <location filename="../frmsettings.ui" line="1227"/>
         <source>Size:</source>
         <translation>Taille:</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1237"/>
-        <location filename="../frmsettings.ui" line="1247"/>
+        <location filename="../frmsettings.ui" line="1243"/>
+        <location filename="../frmsettings.ui" line="1253"/>
         <source>8</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1252"/>
+        <location filename="../frmsettings.ui" line="1258"/>
         <source>9</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1257"/>
+        <location filename="../frmsettings.ui" line="1263"/>
         <source>10</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1262"/>
+        <location filename="../frmsettings.ui" line="1268"/>
         <source>11</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1267"/>
+        <location filename="../frmsettings.ui" line="1273"/>
         <source>12</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1275"/>
+        <location filename="../frmsettings.ui" line="1281"/>
         <source>pt</source>
         <translation>Points</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1298"/>
+        <location filename="../frmsettings.ui" line="1304"/>
         <source>(restart needed)</source>
         <translation>(Redémarrage nécessaire)</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1329"/>
+        <location filename="../frmsettings.ui" line="1335"/>
         <source>Set to defaults</source>
         <translation>Paramètres par default</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1352"/>
+        <location filename="../frmsettings.ui" line="1358"/>
         <source>OK</source>
         <translation>ОК</translation>
     </message>
     <message>
-        <location filename="../frmsettings.ui" line="1362"/>
+        <location filename="../frmsettings.ui" line="1368"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>

@@ -194,7 +194,7 @@ QGroupBox {
               <item>
                <widget class="QLabel" name="label_34">
                 <property name="text">
-                 <string>Settings measurement units:</string>
+                 <string>Application measurement units:</string>
                 </property>
                </widget>
               </item>
