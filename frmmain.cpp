@@ -601,11 +601,6 @@ void frmMain::grblReset()
     m_transferCompleted = true;
     m_fileCommandIndex = 0;
 
-//    m_programSpeed = true;
-//    ui->cmdSpindle->setChecked(false);
-//    m_programSpeed = false;
-//    m_timerToolAnimation.stop();
-
     m_reseting = true;
     m_homing = false;
     m_resetCompleted = false;
@@ -704,7 +699,7 @@ void frmMain::onSerialPortReadyRead()
 
                 // Test for job complete
                 if (m_processingFile && m_transferCompleted &&
-                        ((status == IDLE && m_lastGrblStatus == 2) || status == CHECK)) {
+                        ((status == IDLE && m_lastGrblStatus == RUN) || status == CHECK)) {
                     qDebug() << "job completed:" << m_fileCommandIndex << m_currentModel->rowCount() - 1;
 
                     // Shadow last segment
@@ -1070,6 +1065,8 @@ void frmMain::onSerialPortReadyRead()
 
                 // Handle hardware reset
                 if (dataIsReset(data)) {
+                    qDebug() << "hardware reset";
+
                     m_processingFile = false;
                     m_transferCompleted = true;
                     m_fileCommandIndex = 0;
@@ -1078,7 +1075,6 @@ void frmMain::onSerialPortReadyRead()
                     m_homing = false;
                     m_lastGrblStatus = -1;
 
-//                    m_updateSpindleSpeed = true;
                     m_updateParserStatus = true;
 
                     m_commands.clear();
