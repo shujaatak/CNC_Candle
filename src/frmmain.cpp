@@ -508,7 +508,7 @@ void frmMain::updateControlsState() {
     ui->grpHeightMapSettings->setEnabled(!m_processingFile);
 
     ui->chkTestMode->setVisible(!m_heightMapMode);
-    ui->chkAutoScroll->setVisible(!m_heightMapMode);
+    ui->chkAutoScroll->setVisible(ui->splitter->sizes()[1] && !m_heightMapMode);
 
     ui->tblHeightMap->setVisible(m_heightMapMode);
     ui->tblProgram->setVisible(!m_heightMapMode);
@@ -744,8 +744,8 @@ void frmMain::onSerialPortReadyRead()
                     case IDLE: // Idle
                         if (!m_processingFile && m_resetCompleted) {
                             m_aborting = false;
-                            restoreOffsets();
                             restoreParserState();
+                            restoreOffsets();
                             return;
                         }
                         break;
@@ -2612,10 +2612,11 @@ void frmMain::addRecentHeightmap(QString fileName)
 void frmMain::onActRecentFileTriggered()
 {
     QAction *action = static_cast<QAction*>(sender());
+    QString fileName = action->text();
 
     if (action != NULL) {
         if (!saveChanges(m_heightMapMode)) return;
-        if (!m_heightMapMode) loadFile(action->text()); else loadHeightMap(action->text());
+        if (!m_heightMapMode) loadFile(fileName); else loadHeightMap(fileName);
     }
 }
 
