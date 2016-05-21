@@ -4,13 +4,15 @@
 //#define INITTIME //QTime time; time.start();
 //#define PRINTTIME(x) //qDebug() << "time elapse" << QString("%1:").arg(x) << time.elapsed(); time.start();
 
-#define IDLE 0
-#define ALARM 1
-#define RUN 2
-#define HOME 3
-#define HOLD 4
-#define QUEUE 5
-#define CHECK 6
+#define UNKNOWN 0
+#define IDLE 1
+#define ALARM 2
+#define RUN 3
+#define HOME 4
+#define HOLD 5
+#define QUEUE 6
+#define CHECK 7
+#define DOOR 8
 
 #include <QFileDialog>
 #include <QTextStream>
@@ -32,10 +34,10 @@ frmMain::frmMain(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::frmMain)
 {
-    m_status << "Idle" << "Alarm" << "Run" << "Home" << "Hold" << "Queue" << "Check";
-    m_statusCaptions << tr("Idle") << tr("Alarm") << tr("Run") << tr("Home") << tr("Hold") << tr("Queue") << tr("Check");
-    m_statusBackColors << "palette(button)" << "red" << "lime" << "lime" << "yellow" << "yellow" << "palette(button)";
-    m_statusForeColors << "palette(text)" << "white" << "black" << "black" << "black" << "black" << "palette(text)";
+    m_status << "Unknown" << "Idle" << "Alarm" << "Run" << "Home" << "Hold" << "Queue" << "Check" << "Door";
+    m_statusCaptions << tr("Unknown") << tr("Idle") << tr("Alarm") << tr("Run") << tr("Home") << tr("Hold") << tr("Queue") << tr("Check") << tr("Door");
+    m_statusBackColors << "red" << "palette(button)" << "red" << "lime" << "lime" << "yellow" << "yellow" << "palette(button)" << "red";
+    m_statusForeColors << "white" << "palette(text)" << "white" << "black" << "black" << "black" << "black" << "palette(text)" << "white";
 
     ui->setupUi(this);
 
@@ -138,10 +140,12 @@ frmMain::frmMain(QWidget *parent) :
     m_serialPort.setDataBits(QSerialPort::Data8);
     m_serialPort.setFlowControl(QSerialPort::NoFlowControl);
     m_serialPort.setStopBits(QSerialPort::OneStop);
+
     if (m_settings.port() != "") {
         m_serialPort.setPortName(m_settings.port());
         m_serialPort.setBaudRate(m_settings.baud());
     }
+
     connect(&m_serialPort, SIGNAL(readyRead()), this, SLOT(onSerialPortReadyRead()));
     connect(&m_serialPort, SIGNAL(error(QSerialPort::SerialPortError)), this, SLOT(onSerialPortError(QSerialPort::SerialPortError)));
 
@@ -184,6 +188,7 @@ bool frmMain::isGCodeFile(QString fileName)
     return fileName.endsWith(".txt", Qt::CaseInsensitive)
           || fileName.endsWith(".nc", Qt::CaseInsensitive)
           || fileName.endsWith(".ncc", Qt::CaseInsensitive)
+          || fileName.endsWith(".ngc", Qt::CaseInsensitive)
           || fileName.endsWith(".tap", Qt::CaseInsensitive);
 }
 
@@ -526,7 +531,7 @@ void frmMain::updateControlsState() {
 void frmMain::openPort()
 {
     if (m_serialPort.open(QIODevice::ReadWrite)) {
-        ui->txtStatus->setText(tr("Connected"));
+        ui->txtStatus->setText(tr("Port opened"));
         ui->txtStatus->setStyleSheet(QString("background-color: palette(button); color: palette(text);"));
 //        updateControlsState();
         grblReset();
@@ -595,7 +600,7 @@ void frmMain::grblReset()
     qDebug() << "grbl reset";
 
     m_serialPort.write(QByteArray(1, (char)24));
-    m_serialPort.flush();
+//    m_serialPort.flush();
 
     m_processingFile = false;
     m_transferCompleted = true;
@@ -668,6 +673,9 @@ void frmMain::onSerialPortReadyRead()
             QRegExp stx("<([^,^>]*)");
             if (stx.indexIn(data) != -1) {
                 status = m_status.indexOf(stx.cap(1));
+
+                // Undetermined status
+                if (status == -1) status = 0;
 
                 // Update status
                 if (status != m_lastGrblStatus) {
@@ -744,8 +752,8 @@ void frmMain::onSerialPortReadyRead()
                     case IDLE: // Idle
                         if (!m_processingFile && m_resetCompleted) {
                             m_aborting = false;
-                            restoreParserState();
                             restoreOffsets();
+                            restoreParserState();
                             return;
                         }
                         break;
@@ -893,11 +901,6 @@ void frmMain::onSerialPortReadyRead()
                             } else if (m_settingZeroZ) {
                                 m_settingZeroZ = false;
                                 m_storedZ = toMetric(rx.cap(3).toDouble());
-                            } else {
-                                // Save offsets
-                                m_storedOffsets[0][0] = toMetric(rx.cap(1).toDouble());
-                                m_storedOffsets[0][1] = toMetric(rx.cap(2).toDouble());
-                                m_storedOffsets[0][2] = toMetric(rx.cap(3).toDouble());
                             }
                             ui->cmdReturnXY->setToolTip(QString(tr("Restore XYZ:\n%1, %2, %3")).arg(m_storedX).arg(m_storedY).arg(m_storedZ));
                         }
@@ -1348,7 +1351,7 @@ void frmMain::on_cmdFileOpen_clicked()
     if (!m_heightMapMode) {
         if (!saveChanges(false)) return;
 
-        QString fileName = QFileDialog::getOpenFileName(this, tr("Open"), "", tr("G-Code files (*.nc *.ncc *.tap *.txt);;All files (*.*)"));
+        QString fileName = QFileDialog::getOpenFileName(this, tr("Open"), "", tr("G-Code files (*.nc *.ncc *.ngc *.tap *.txt);;All files (*.*)"));
 
         if (fileName != "") {
             addRecentFile(fileName);
@@ -1594,17 +1597,18 @@ void frmMain::restoreParserState()
 
 void frmMain::storeOffsets()
 {
-    sendCommand("$#", -2, m_settings.showUICommands());
+//    sendCommand("$#", -2, m_settings.showUICommands());
 }
 
 void frmMain::restoreOffsets()
 {
-    sendCommand(QString("G21G90X%1Y%2Z%3").arg(toMetric(ui->txtMPosX->text().toDouble()))
+    // Still have pre-reset working position
+    sendCommand(QString("G21G53G90X%1Y%2Z%3").arg(toMetric(ui->txtMPosX->text().toDouble()))
                                        .arg(toMetric(ui->txtMPosY->text().toDouble()))
                                        .arg(toMetric(ui->txtMPosZ->text().toDouble())), -1, m_settings.showUICommands());
-    sendCommand(QString("G21G92X%1Y%2Z%3").arg(toMetric(ui->txtMPosX->text().toDouble()) - m_storedOffsets[0][0])
-                                       .arg(toMetric(ui->txtMPosY->text().toDouble()) - m_storedOffsets[0][1])
-                                       .arg(toMetric(ui->txtMPosZ->text().toDouble()) - m_storedOffsets[0][2]), -1, m_settings.showUICommands());
+    sendCommand(QString("G21G92X%1Y%2Z%3").arg(toMetric(ui->txtWPosX->text().toDouble()))
+                                       .arg(toMetric(ui->txtWPosY->text().toDouble()))
+                                       .arg(toMetric(ui->txtWPosZ->text().toDouble())), -1, m_settings.showUICommands());
 }
 
 void frmMain::sendNextFileCommands() {    
@@ -1809,6 +1813,37 @@ void frmMain::applySettings() {
     m_codeDrawer->setColorEnd(m_settings.colors("ToolpathEnd"));
     m_codeDrawer->update();
 
+    // Adapt visualizer buttons colors
+    const int LIGHTBOUND = 127;
+    const int NORMALSHIFT = 40;
+    const int HIGHLIGHTSHIFT = 80;
+
+    QColor base = m_settings.colors("VisualizerBackground");
+    bool light = base.value() > LIGHTBOUND;
+    QColor normal, highlight;
+
+    normal.setHsv(base.hue(), base.saturation(), base.value() + (light ? -NORMALSHIFT : NORMALSHIFT));
+    highlight.setHsv(base.hue(), base.saturation(), base.value() + (light ? -HIGHLIGHTSHIFT : HIGHLIGHTSHIFT));
+
+    ui->glwVisualizer->setStyleSheet(QString("QToolButton {border: 1px solid %1; \
+                background-color: %3} QToolButton:hover {border: 1px solid %2;}")
+                .arg(normal.name()).arg(highlight.name())
+                .arg(base.name()));
+
+    ui->cmdFit->setIcon(QIcon(":/images/fit_1.png"));
+    ui->cmdIsometric->setIcon(QIcon(":/images/cube.png"));
+    ui->cmdFront->setIcon(QIcon(":/images/cubeFront.png"));
+    ui->cmdLeft->setIcon(QIcon(":/images/cubeLeft.png"));
+    ui->cmdTop->setIcon(QIcon(":/images/cubeTop.png"));
+
+    if (!light) {
+        Util::invertButtonIconColors(ui->cmdFit);
+        Util::invertButtonIconColors(ui->cmdIsometric);
+        Util::invertButtonIconColors(ui->cmdFront);
+        Util::invertButtonIconColors(ui->cmdLeft);
+        Util::invertButtonIconColors(ui->cmdTop);
+    }
+
     ui->cboCommand->setMinimumHeight(ui->cboCommand->height());
     ui->cmdClearConsole->setFixedHeight(ui->cboCommand->height());
     ui->cmdCommandSend->setFixedHeight(ui->cboCommand->height());
@@ -1916,9 +1951,14 @@ void frmMain::on_cmdZeroZ_clicked()
 void frmMain::on_cmdReturnXY_clicked()
 {    
     sendCommand(QString("G21"), -1, m_settings.showUICommands());
-    sendCommand(QString("G53G90G0X%1Y%2Z%3").arg(m_storedX).arg(m_storedY).arg(toMetric(ui->txtMPosZ->text().toDouble())),
-                -1, m_settings.showUICommands());
-    sendCommand(QString("G92X0Y0Z%1").arg(toMetric(ui->txtMPosZ->text().toDouble()) - m_storedZ), -1, m_settings.showUICommands());
+//    sendCommand(QString("G53G90G0X%1Y%2Z%3").arg(m_storedX).arg(m_storedY).arg(toMetric(ui->txtMPosZ->text().toDouble())),
+//                -1, m_settings.showUICommands());
+    sendCommand(QString("G53G90G0X%1Y%2Z%3").arg(toMetric(ui->txtMPosX->text().toDouble()))
+                                            .arg(toMetric(ui->txtMPosY->text().toDouble()))
+                                            .arg(toMetric(ui->txtMPosZ->text().toDouble())), -1, m_settings.showUICommands());
+    sendCommand(QString("G92X%1Y%2Z%3").arg(toMetric(ui->txtMPosX->text().toDouble()) - m_storedX)
+                                        .arg(toMetric(ui->txtMPosY->text().toDouble()) - m_storedY)
+                                        .arg(toMetric(ui->txtMPosZ->text().toDouble()) - m_storedZ), -1, m_settings.showUICommands());
 }
 
 void frmMain::on_cmdReset_clicked()
@@ -2171,7 +2211,7 @@ bool frmMain::saveProgramToFile(QString fileName, GCodeTableModel *model)
 
 void frmMain::on_actFileSaveTransformedAs_triggered()
 {
-    QString fileName = (QFileDialog::getSaveFileName(this, tr("Save file as"), "", tr("G-Code files (*.nc *.ncc *.tap *.txt)")));
+    QString fileName = (QFileDialog::getSaveFileName(this, tr("Save file as"), "", tr("G-Code files (*.nc *.ncc *.ngc *.tap *.txt)")));
 
     if (!fileName.isEmpty()) {
         saveProgramToFile(fileName, &m_programHeightmapModel);
@@ -2181,7 +2221,7 @@ void frmMain::on_actFileSaveTransformedAs_triggered()
 void frmMain::on_actFileSaveAs_triggered()
 {
     if (!m_heightMapMode) {
-        QString fileName = (QFileDialog::getSaveFileName(this, tr("Save file as"), "", tr("G-Code files (*.nc *.ncc *.tap *.txt)")));
+        QString fileName = (QFileDialog::getSaveFileName(this, tr("Save file as"), "", tr("G-Code files (*.nc *.ncc *.ngc *.tap *.txt)")));
 
         if (!fileName.isEmpty()) if (saveProgramToFile(fileName, &m_programModel)) {
             m_programFileName = fileName;
@@ -2274,6 +2314,7 @@ bool frmMain::dataIsFloating(QString data) {
     ends << "Reset to continue";
     ends << "'$H'|'$X' to unlock";
     ends << "ALARM: Hard limit. MPos?";
+    ends << "Check Door";
 
     foreach (QString str, ends) {
         if (data.contains(str)) return true;
@@ -2283,8 +2324,7 @@ bool frmMain::dataIsFloating(QString data) {
 }
 
 bool frmMain::dataIsReset(QString data) {
-//    return data.contains("'$' for help");
-    return data.toUpper().contains(QRegExp("^GRBL \\d\\.\\d."));
+    return QRegExp("^GRBL|GCARVIN\\s\\d\\.\\d.").indexIn(data.toUpper()) != -1;
 }
 
 QString frmMain::feedOverride(QString command)
@@ -3149,10 +3189,12 @@ void frmMain::on_chkHeightMapUse_clicked(bool checked)
             time.start();
 
             for (int i = 0; i < list->count(); i++) {
-                x = list->at(i)->getStart().x();
-                y = list->at(i)->getStart().y();
-                z = list->at(i)->getStart().z() + Interpolation::bicubicInterpolate(borderRect, &m_heightMapModel, x, y);
-                list->at(i)->setStart(QVector3D(x, y, z));
+                if (i == 0) {
+                    x = list->at(i)->getStart().x();
+                    y = list->at(i)->getStart().y();
+                    z = list->at(i)->getStart().z() + Interpolation::bicubicInterpolate(borderRect, &m_heightMapModel, x, y);
+                    list->at(i)->setStart(QVector3D(x, y, z));
+                } else list->at(i)->setStart(list->at(i - 1)->getEnd());
 
                 x = list->at(i)->getEnd().x();
                 y = list->at(i)->getEnd().y();
