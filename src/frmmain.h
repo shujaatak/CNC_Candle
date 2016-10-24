@@ -115,8 +115,10 @@ private slots:
     void on_cmdUnlock_clicked();
     void on_cmdSafePosition_clicked();
     void on_cmdSpindle_toggled(bool checked);
+    void on_cmdSpindle_clicked(bool checked);
     void on_txtSpindleSpeed_editingFinished();
     void on_sliSpindleSpeed_valueChanged(int value);
+    void on_sliSpindleSpeed_actionTriggered(int action);
     void on_cmdYPlus_clicked();
     void on_cmdYMinus_clicked();
     void on_cmdXPlus_clicked();
@@ -141,6 +143,7 @@ private slots:
     void on_chkFeedOverride_toggled(bool checked);
     void on_grpFeed_toggled(bool checked);
     void on_grpSpindle_toggled(bool checked);
+    void on_grpLaser_toggled(bool checked);
     void on_grpJog_toggled(bool checked);
     void on_chkKeyboardControl_toggled(bool checked);
     void on_tblProgram_customContextMenuRequested(const QPoint &pos);
@@ -167,9 +170,15 @@ private slots:
     void on_cmdHeightMapBorderAuto_clicked();
     void on_cmdFileAbort_clicked();
 
-    void on_sliSpindleSpeed_actionTriggered(int action);
+    void on_txtLaserPower_editingFinished();
 
-    void on_cmdSpindle_clicked(bool checked);
+    void on_sliLaserPower_actionTriggered(int action);
+
+    void on_sliLaserPower_valueChanged(int value);
+
+    void on_cmdLaser_clicked(bool checked);
+
+    void on_cmdLaser_toggled(bool checked);
 
 protected:
     void showEvent(QShowEvent *se);
@@ -254,6 +263,7 @@ private:
     bool m_settingZeroZ = false;
     bool m_homing = false;
     bool m_updateSpindleSpeed = false;
+    bool m_updateLaserPower = false;
     bool m_updateParserStatus = false;
     bool m_updateFeed = false;
 

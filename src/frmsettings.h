@@ -95,6 +95,8 @@ public:
     void setPanelHeightmap(bool panelHeightmap);
     bool panelSpindle();
     void setPanelSpindle(bool panelSpindle);
+    bool panelLaser();
+    void setPanelLaser(bool value);
     bool panelFeed();
     void setPanelFeed(bool panelFeed);
     bool panelJog();

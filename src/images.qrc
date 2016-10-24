@@ -38,5 +38,6 @@
         <file>images/origin.png</file>
         <file>images/candle_256.png</file>
         <file>images/run.png</file>
+        <file>images/laser1.png</file>
     </qresource>
 </RCC>

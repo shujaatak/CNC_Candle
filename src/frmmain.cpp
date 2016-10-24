@@ -75,6 +75,8 @@ frmMain::frmMain(QWidget *parent) :
     ui->cmdYMinus->setBackColor(ui->cmdXMinus->backColor());
     ui->cmdYPlus->setBackColor(ui->cmdXMinus->backColor());
 
+    ui->cmdLaser->setHighlightColor(QColor(255, 75, 75));
+
     //    ui->cmdReset->setBackColor(QColor(255, 228, 181));
 
     ui->cmdFit->setParent(ui->glwVisualizer);
@@ -266,6 +268,7 @@ void frmMain::loadSettings()
 
     m_settings.setPanelHeightmap(set.value("panelHeightmapVisible", true).toBool());
     m_settings.setPanelSpindle(set.value("panelSpindleVisible", true).toBool());
+    m_settings.setPanelLaser(set.value("panelLaserVisible", true).toBool());
     m_settings.setPanelFeed(set.value("panelFeedVisible", true).toBool());
     m_settings.setPanelJog(set.value("panelJogVisible", true).toBool());
 
@@ -274,6 +277,8 @@ void frmMain::loadSettings()
     ui->chkAutoScroll->setChecked(set.value("autoScroll", false).toBool());
     ui->sliSpindleSpeed->setValue(set.value("spindleSpeed", 100).toInt() / 100);
     ui->txtSpindleSpeed->setValue(set.value("spindleSpeed", 100).toInt());
+    ui->sliLaserPower->setValue(set.value("laserPower", 100).toInt());
+    ui->txtLaserPower->setValue(set.value("laserPower", 100).toInt());
     ui->chkFeedOverride->setChecked(set.value("feedOverride", false).toBool());
     ui->sliFeed->setValue(set.value("feed", 100).toInt());
     m_settings.setUnits(set.value("units", 0).toInt());
@@ -390,6 +395,7 @@ void frmMain::saveSettings()
     set.setValue("formGeometry", this->saveGeometry());
     set.setValue("formSettingsSize", m_settings.size());
     set.setValue("spindleSpeed", ui->txtSpindleSpeed->value());
+    set.setValue("laserPower", ui->txtLaserPower->value());
     set.setValue("feedOverride", ui->chkFeedOverride->isChecked());
     set.setValue("feed", ui->txtFeed->value());
     set.setValue("heightmapPanel", ui->grpHeightMap->isChecked());
@@ -409,6 +415,7 @@ void frmMain::saveSettings()
     set.setValue("safePositionCommand", m_settings.safePositionCommand());
     set.setValue("panelHeightmapVisible", m_settings.panelHeightmap());
     set.setValue("panelSpindleVisible", m_settings.panelSpindle());
+    set.setValue("panelLaserVisible", m_settings.panelLaser());
     set.setValue("panelFeedVisible", m_settings.panelFeed());
     set.setValue("panelJogVisible", m_settings.panelJog());
     set.setValue("fontSize", m_settings.fontSize());
@@ -617,6 +624,10 @@ void frmMain::sendCommand(QString command, int tableIndex, bool showInConsole)
         if (ui->txtSpindleSpeed->value() != speed) {
             ui->txtSpindleSpeed->setValue(speed);
             ui->sliSpindleSpeed->setValue(speed / 100);
+        }
+        if (ui->txtLaserPower->value() != speed) {
+            ui->txtLaserPower->setValue(speed);
+            ui->sliLaserPower->setValue(speed);
         }
     }
 
@@ -893,9 +904,11 @@ void frmMain::onSerialPortReadyRead()
                             m_spindleCW = response.contains("M3");
                             m_timerToolAnimation.start(25, this);
                             ui->cmdSpindle->setChecked(true);
+                            ui->cmdLaser->setChecked(true);
                         } else {
                             m_timerToolAnimation.stop();
                             ui->cmdSpindle->setChecked(false);
+                            ui->cmdLaser->setChecked(false);
                         }
 
                         // Spindle speed
@@ -903,6 +916,7 @@ void frmMain::onSerialPortReadyRead()
                         if (rx.indexIn(response) != -1) {
                             double speed = toMetric(rx.cap(1).toDouble()); //RPM in imperial?
                             if (fabs(ui->txtSpindleSpeed->value() - speed) < 2.54) ui->txtSpindleSpeed->setStyleSheet("color: palette(text);");
+                            if (fabs(ui->txtLaserPower->value() - speed) < 2.54) ui->txtLaserPower->setStyleSheet("color: palette(text);");
                         }
 
                         // Feed
@@ -1147,6 +1161,10 @@ void frmMain::onTimerConnection()
         if (m_updateSpindleSpeed) {
             m_updateSpindleSpeed = false;
             sendCommand(QString("S%1").arg(ui->txtSpindleSpeed->value()), -2, m_settings.showUICommands());
+        }
+        if (m_updateLaserPower) {
+            m_updateLaserPower = false;
+            sendCommand(QString("S%1").arg(ui->txtLaserPower->value()), -2, m_settings.showUICommands());
         }
         if (m_updateParserStatus) {
             m_updateParserStatus = false;
@@ -1854,11 +1872,17 @@ void frmMain::applySettings() {
     ui->sliSpindleSpeed->setMinimum(ui->txtSpindleSpeed->minimum() / 100);
     ui->sliSpindleSpeed->setMaximum(ui->txtSpindleSpeed->maximum() / 100);
 
+    ui->txtLaserPower->setMinimum(m_settings.laserPowerMin());
+    ui->txtLaserPower->setMaximum(m_settings.laserPowerMax());
+    ui->sliLaserPower->setMinimum(m_settings.laserPowerMin());
+    ui->sliLaserPower->setMaximum(m_settings.laserPowerMax());
+
     ui->scrollArea->setVisible(m_settings.panelHeightmap() || m_settings.panelFeed()
                                || m_settings.panelJog() || m_settings.panelSpindle());
 
     ui->grpHeightMap->setVisible(m_settings.panelHeightmap());
     ui->grpSpindle->setVisible(m_settings.panelSpindle());
+    ui->grpLaser->setVisible(m_settings.panelLaser());
     ui->grpFeed->setVisible(m_settings.panelFeed());
     ui->grpJog->setVisible(m_settings.panelJog());
 
@@ -2112,6 +2136,47 @@ void frmMain::on_sliSpindleSpeed_actionTriggered(int action)
 {
     ui->txtSpindleSpeed->setValue(ui->sliSpindleSpeed->sliderPosition() * 100);
     m_updateSpindleSpeed = true;
+}
+
+void frmMain::on_txtLaserPower_editingFinished()
+{
+    ui->txtLaserPower->setStyleSheet("color: red;");
+    ui->sliLaserPower->setValue(ui->txtLaserPower->value());
+    m_updateLaserPower = true;
+}
+
+void frmMain::on_sliLaserPower_actionTriggered(int action)
+{
+    ui->txtLaserPower->setValue(ui->sliLaserPower->sliderPosition());
+    m_updateLaserPower = true;
+}
+
+void frmMain::on_sliLaserPower_valueChanged(int value)
+{
+    Q_UNUSED(value)
+
+    ui->txtLaserPower->setStyleSheet("color: red;");
+
+    if (!ui->grpLaser->isChecked() && ui->cmdLaser->isChecked())
+        ui->grpLaser->setTitle(tr("Laser") + QString(tr(" (%1)")).arg(ui->txtLaserPower->text()));
+}
+
+void frmMain::on_cmdLaser_clicked(bool checked)
+{
+    sendCommand(checked ? QString("M3 S%1").arg(ui->txtLaserPower->text()) : "M5", -1, m_settings.showUICommands());
+}
+
+void frmMain::on_cmdLaser_toggled(bool checked)
+{
+    ui->grpLaser->setProperty("overrided", checked);
+    style()->unpolish(ui->grpLaser);
+    ui->grpLaser->ensurePolished();
+
+    if (checked) {
+        if (!ui->grpLaser->isChecked()) ui->grpLaser->setTitle(tr("Laser") + QString(tr(" (%1)")).arg(ui->txtLaserPower->text()));
+    } else {
+        ui->grpLaser->setTitle(tr("Laser"));
+    }
 }
 
 void frmMain::on_cmdYPlus_clicked()
@@ -2482,6 +2547,18 @@ void frmMain::on_grpSpindle_toggled(bool checked)
     updateLayouts();
 
     ui->widgetSpindle->setVisible(checked);
+}
+
+void frmMain::on_grpLaser_toggled(bool checked)
+{
+    if (checked) {
+        ui->grpLaser->setTitle(tr("Laser"));
+    } else if (ui->cmdLaser->isChecked()) {
+        ui->grpLaser->setTitle(tr("Laser") + QString(tr(" (%1)")).arg(ui->txtLaserPower->text()));
+    }
+    updateLayouts();
+
+    ui->widgetLaser->setVisible(checked);
 }
 
 void frmMain::on_grpJog_toggled(bool checked)

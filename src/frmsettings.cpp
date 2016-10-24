@@ -470,6 +470,16 @@ void frmSettings::setPanelSpindle(bool panelSpindle)
     ui->chkPanelSpindle->setChecked(panelSpindle);
 }
 
+bool frmSettings::panelLaser()
+{
+    return ui->chkPanelLaser->isChecked();
+}
+
+void frmSettings::setPanelLaser(bool value)
+{
+    ui->chkPanelLaser->setChecked(value);
+}
+
 bool frmSettings::panelFeed()
 {
     return ui->chkPanelFeed->isChecked();
