@@ -10,6 +10,7 @@
 #include <QStyleFactory>
 #include <QFontDatabase>
 #include <QMessageBox>
+#include "frmmain.h"
 
 int main(int argc, char *argv[])
 {
@@ -22,6 +23,7 @@ int main(int argc, char *argv[])
 #endif
 
     QApplication a(argc, argv);
+    frmMain form;
 
 #ifdef GLES
     QFontDatabase::addApplicationFont(":/fonts/Ubuntu-R.ttf");
@@ -80,6 +82,7 @@ int main(int argc, char *argv[])
 #endif
 
     a.setStyleSheet(a.styleSheet() + "QWidget {font-size: 8pt}");
+    form.show();
 
     return a.exec();
 }

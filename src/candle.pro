@@ -37,7 +37,9 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 TRANSLATIONS += translations/candle_en.ts translations/candle_ru.ts translations/candle_es.ts translations/candle_fr.ts translations/candle_pt.ts
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    frmmain.cpp \
+    frmcentral.cpp
 
 DEFINES += _USE_MATH_DEFINES
 
@@ -46,3 +48,11 @@ RESOURCES += \
     images.qrc
 
 CONFIG += c++11
+
+FORMS += \
+    frmmain.ui \
+    frmcentral.ui
+
+HEADERS += \
+    frmmain.h \
+    frmcentral.h
